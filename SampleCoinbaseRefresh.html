@@ -1,36 +1,52 @@
+
+   
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTC-USD-spot</title>
+    <title>Sample</title>
     <button onclick="refresh()">refresh</button>
 </head>
 <body>
+    <div id="target">...</div>
+    <div id="targetB">...</div>
+    <div id="targetS">...</div>
+
 
     <div class="timmerWatch">
         <p><span id="seconds">00</span>:<span id="tens">00</span></p>
     </div>
 
-    <div id="target">...</div>
-    
     <script>
-        function refresh(){
-            var url="https://api.coinbase.com/v2/prices/BTC-USD/spot"
-            fetch(url).then(convert).then(show)
+        var result=[]
+        async function refresh(){
             startTime()
+            var url="https://api.coinbase.com/v2/prices/BTC-USD"
+
+          await  fetch(url+"/buy").then(convert).then(show)
+          await  fetch(url+"/sell").then(convert).then(show)
+            
         }
         function convert(response){
             return response.json()
         }
-        var e =document.getElementById("target")
         function show(data){
- 
-            e.innerText=data.data.amount
+            result.push(data)
+            if(result.length == 2){
+            var spread =  result[0].data.amount - result[1].data.amount 
+            var e = document.getElementById("target")
+            e.innerText = "Spread is " + spread.toFixed(2)
+            var f = document.getElementById("targetB")
+            f.innerText="Buy price = " + result[0].data.amount
+            var g = document.getElementById("targetS")
+            g.innerText="Sell price = " + result[1].data.amount
+            }
+            
         }
 
-        var timeToRefresh =15;
+        var timeToRefresh =1;
         var seconds = 00;
         var tens = 00;
         var appendTens = document.getElementById("tens");
@@ -45,7 +61,9 @@
             tens = "00";
             seconds = "00";
             appendTens.innerHTML = tens;
-            appendSeconds.innerHTML = seconds;    
+            appendSeconds.innerHTML = seconds;
+            result=[]
+                
         }
         async function startTimer() {
             tens++;
@@ -62,9 +80,11 @@
                 appendTens.innerHTML = "0" + 0;
             }
             if (seconds == timeToRefresh) {   
+                
                 await resetTime()
                 await refresh()
             }
+            
             if (seconds > 9) {
                 appendSeconds.innerHTML = seconds;
             }

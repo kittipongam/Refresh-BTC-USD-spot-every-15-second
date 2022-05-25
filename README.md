@@ -16,18 +16,28 @@ Web Service เป็นตัวกลางในการสื่อสา�
 #### fetch command and convert to JSON
 use fetch command with url and convert to JSON(Java Scipt Object Notation and show to use innerText command)
 >
-    function refresh(){
-                var url="https://api.coinbase.com/v2/prices/BTC-USD/spot"
-                fetch(url).then(convert).then(show)
-                startTime()
-            }
-            function convert(response){
-                return response.json()
-            }
-            var e =document.getElementById("target")
-            function show(data){
-    
-                e.innerText=data.data.amount
+        var result=[]   // create array name result
+        async function refresh(){
+            startTime() //start timmer
+            var url="https://api.coinbase.com/v2/prices/BTC-USD"
+
+          await  fetch(url+"/buy").then(convert).then(show)
+          await  fetch(url+"/sell").then(convert).then(show)
+            
+        }
+        function convert(response){
+            return response.json()
+        }
+        function show(data){
+            result.push(data)
+            if(result.length == 2){
+            var spread =  result[0].data.amount - result[1].data.amount 
+            var e = document.getElementById("target")
+            e.innerText = "Spread is " + spread.toFixed(2)
+            var f = document.getElementById("targetB")
+            f.innerText="Buy price = " + result[0].data.amount // show buy price of array[0]
+            var g = document.getElementById("targetS")
+            g.innerText="Sell price = " + result[1].data.amount  // show sell price of array[1]
             }
 >
 
@@ -55,7 +65,8 @@ use fetch command with url and convert to JSON(Java Scipt Object Notation and sh
                 tens = "00";
                 seconds = "00";
                 appendTens.innerHTML = tens;
-                appendSeconds.innerHTML = seconds;    
+                appendSeconds.innerHTML = seconds;
+                result=[]  // clear array    
             }
             async function startTimer() {
                 tens++;
