@@ -98,3 +98,85 @@ use fetch command with url and convert to JSON(Java Scipt Object Notation and sh
 here is the result to refresh value BTC-USD spot from coinbase every 15 seconds
 
 ![image](https://user-images.githubusercontent.com/104770048/170218884-182196c4-71d0-4bed-8d5a-39e52c55edbd.png)
+
+
+### result without time
+
+
+>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sample</title>
+        <button onclick="refresh()">refresh</button>
+    </head>
+    <body>
+        <div id="target">...</div>
+        <div id="targetB">...</div>
+        <div id="targetS">...</div>
+
+
+        <script>
+            var result=[]
+            async function refresh(){
+                startTime()
+                var url="https://api.coinbase.com/v2/prices/BTC-USD"
+
+            await  fetch(url+"/buy").then(convert).then(show)
+            await  fetch(url+"/sell").then(convert).then(show)
+                
+            }
+            function convert(response){
+                return response.json()
+            }
+            function show(data){
+                result.push(data)
+                if(result.length == 2){
+                var spread =  result[0].data.amount - result[1].data.amount 
+                var e = document.getElementById("target")
+                e.innerText = "Spread is " + spread.toFixed(2)
+                var f = document.getElementById("targetB")
+                f.innerText="Buy price = " + result[0].data.amount
+                var g = document.getElementById("targetS")
+                g.innerText="Sell price = " + result[1].data.amount
+                }
+                
+            }
+
+            var timeToRefresh =3;
+            var seconds = 00;
+            var tens = 00;
+            var Interval;
+            function startTime() {
+                clearInterval(Interval);
+                Interval = setInterval(startTimer, 10); 
+            }
+            function resetTime() {
+                clearInterval(Interval);
+                tens = "00";
+                seconds = "00";
+                result=[]         
+            }
+            async function startTimer() {
+                tens++;
+                if (tens > 99) {
+                    seconds++;
+                    tens = 0;
+                }
+                if (seconds == timeToRefresh) {       
+                    await resetTime()
+                    await refresh()
+                }
+                
+                
+    }
+        </script>
+    </body>
+    </html>
+>
+
+
+![image](https://user-images.githubusercontent.com/104770048/170221214-2a586544-41e0-4871-9ff2-7d8083eb7f26.png)
