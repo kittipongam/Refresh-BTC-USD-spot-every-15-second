@@ -5,7 +5,7 @@
 Web Service เป็นตัวกลางในการสื่อสารข้อมูล เช่นต้องการรู้ราคา Bitcoin
 หรือ Cryptocurrency ตัวไหน ก็ส่งคําถามไปที่ Web Service ของ Coinbase ได้ โดยจะส่งไปถามราคาจากเว็ปของ coinbase และเขียนคำสั่งให้ refresh ทำงานทุกๆ 15 นาทีเพื่อแสดงผลลัพธ์ราคาที่อัพในเเต่ละ 15 วินาที
 
-#### Add some title and button
+### Add some title and button
 //button with event onclick to command refresh function
 >
     <title>BTC-USD-spot</title>
@@ -13,7 +13,7 @@ Web Service เป็นตัวกลางในการสื่อสา�
 >
 
 
-#### fetch command and convert to JSON
+### fetch command and convert to JSON
 use fetch command with url and convert to JSON(Java Scipt Object Notation and show to use innerText command)
 >
     function refresh(){
@@ -31,7 +31,7 @@ use fetch command with url and convert to JSON(Java Scipt Object Notation and sh
             }
 >
 
-#### Adding some timer 
+### Adding some timer 
 // let's add some clock watch
 >
     <div class="timmerWatch">
@@ -80,3 +80,10 @@ use fetch command with url and convert to JSON(Java Scipt Object Notation and sh
                 }
     }
 >
+
+
+### Result
+
+here is the result to refresh value BTC-USD spot from coinbase every 15 seconds
+
+![image](https://user-images.githubusercontent.com/104770048/170193303-c86a3e8a-bdad-4003-b45a-c6d08e91b674.png)
