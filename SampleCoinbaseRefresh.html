@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC-USD-spot</title>
+    <button onclick="refresh()">refresh</button>
+</head>
+<body>
+
+    <div class="timmerWatch">
+        <p><span id="seconds">00</span>:<span id="tens">00</span></p>
+    </div>
+
+    <div id="target">...</div>
+    
+    <script>
+        function refresh(){
+            var url="https://api.coinbase.com/v2/prices/BTC-USD/spot"
+            fetch(url).then(convert).then(show)
+            startTime()
+        }
+        function convert(response){
+            return response.json()
+        }
+        var e =document.getElementById("target")
+        function show(data){
+ 
+            e.innerText=data.data.amount
+        }
+
+        var timeToRefresh =15;
+        var seconds = 00;
+        var tens = 00;
+        var appendTens = document.getElementById("tens");
+        var appendSeconds = document.getElementById("seconds");
+        var Interval;
+        function startTime() {
+            clearInterval(Interval);
+            Interval = setInterval(startTimer, 10); 
+        }
+        function resetTime() {
+            clearInterval(Interval);
+            tens = "00";
+            seconds = "00";
+            appendTens.innerHTML = tens;
+            appendSeconds.innerHTML = seconds;    
+        }
+        async function startTimer() {
+            tens++;
+            if (tens < 9) {
+                appendTens.innerHTML = "0" + tens;
+            }
+            if (tens > 9) {
+                appendTens.innerHTML = tens;
+            }
+            if (tens > 99) {
+                seconds++;
+                appendSeconds.innerHTML = "0" + seconds;
+                tens = 0;
+                appendTens.innerHTML = "0" + 0;
+            }
+            if (seconds == timeToRefresh) {   
+                await resetTime()
+                await refresh()
+            }
+            if (seconds > 9) {
+                appendSeconds.innerHTML = seconds;
+            }
+}
+    </script>
+</body>
+</html>
